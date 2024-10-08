@@ -1,5 +1,7 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import wavingIcon from "../assets/wavinghand.png";
 import emptySvg from "../assets/undraw_file_searching_re_3evy.svg";
 
@@ -17,12 +19,12 @@ export default function Dashboard() {
         <p className="text-gray-600 md:text-xl text-lg">Start by booking a ride</p>
 
         <div className="absolute bottom-20 right-4">
-          <div className="bg-green-300 flex flex-row items-center gap-4 rounded-full shadow">
-            <p className="md:text-xl text-lg ps-4">Book a ride</p>
-            <p className="bg-green-300 p-4 rounded-full md:text-2xl text-xl shadow-lg cursor-pointer">
+          <Link to={'/booking form'} className="hover:bg-green-300 hover:shadow group transition-all duration-300 flex flex-row items-center gap-4 rounded-full cursor-pointer">
+            <p className="md:text-xl text-lg ps-4 invisible group-hover:visible">Book a ride</p>
+            <motion.p whileHover={{rotate: '45deg'}} transition={{duration: 0.3}} className="bg-green-300 p-4 rounded-full md:text-2xl text-xl shadow-lg">
               <FiPlus />
-            </p>
-          </div>
+            </motion.p>
+          </Link>
         </div>
       </section>
     </main>
