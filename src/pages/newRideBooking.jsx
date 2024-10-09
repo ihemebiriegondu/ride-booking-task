@@ -1,19 +1,96 @@
-import React from "react";
-import AutocompleteInput from "../components/autoCompleteInput";
+import React, { useState, useContext } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
+import AutocompleteInput from "../components/autoCompleteInput";
 import Maps from "../components/maps";
 import DateTimeInput from "../components/dateTimeInput";
+import CarInfo from "../components/carInfo";
+import Summary from "../components/summary";
+import { PriceEstimateContext } from "../context/priceEstimateContext";
 
 export default function Form(props) {
+  const { cars } = useContext(PriceEstimateContext);
+
+  const [pickupError, setPickupError] = useState(false);
+  const [destError, setDestError] = useState(false);
+  const [dateError, setDateError] = useState("none");
+  const [timeError, setTimeError] = useState("none");
+  const [carError, setCarError] = useState(false);
+
+  const [showSummary, setShowSummary] = useState(false);
+  const [newRideDetails, setNewRideDetails] = useState({});
+
+  const validateForm = () => {
+    const pickUpValue = document.getElementById("pickupLocation").value;
+    const dropOffValue = document.getElementById("dropOffLocation").value;
+
+    let isValid = true;
+
+    setPickupError(false);
+    setDestError(false);
+    setDateError("none");
+    setTimeError("none");
+
+    if (pickUpValue === "") {
+      setPickupError(true);
+      props.setCarType("");
+      isValid = false;
+    }
+
+    if (dropOffValue === "") {
+      setDestError(true);
+      props.setCarType("");
+      isValid = false;
+    }
+
+    if (props.rideDate === "") {
+      setDateError("empty");
+      isValid = false;
+    }
+
+    if (props.rideTime === "") {
+      setTimeError("empty");
+      isValid = false;
+    }
+
+    if (props.carType === "") {
+      setCarError(true);
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const basicInfoForm = (e) => {
     e.preventDefault();
-    console.log(props.pickupLocation);
+
+    const bookingArray = {};
+    bookingArray.dest = props.dropoffLocation;
+    bookingArray.pick = props.pickupLocation;
+    bookingArray.date = props.rideDate;
+    bookingArray.time = props.rideTime;
+    bookingArray.price = props.totalPrice;
+    bookingArray.carType = cars.find(
+      (car) => car["Car Model"] === props.carType
+    );
+
+    const isFormValid = validateForm();
+
+    if (isFormValid) {
+      console.log("success");
+      setNewRideDetails(bookingArray);
+      setShowSummary(true);
+    }
   };
 
   return (
-    <main className="h-full relative">
+    <main className="h-full relative overflow-y-auto">
       <div className="absolute z-10 top-0 bottom-0 w-full">
-        <Maps />
+        <Maps
+          dropOffLocation={props.dropoffLocation}
+          pickUpLocation={props.pickupLocation}
+          setDistance={props.setDistance}
+        />
       </div>
       <div className="absolute z-20 lg:bottom-1/2 bottom-0 lg:translate-y-1/2 lg:left-6 overflow-y-auto 2xl:w-2/5 xl:w-5/12 lg:w-1/2 w-full bg-white lg:rounded-b-xl sm:rounded-t-xl rounded-t-lg shadow-xl sm:p-5 p-3">
         <form onSubmit={(e) => basicInfoForm(e)} className="">
@@ -26,9 +103,36 @@ export default function Form(props) {
           <div className="bg-green-50 rounded-lg sm:py-4 py-3 sm:px-3 px-2">
             <div className="flex flex-row items-center sm:gap-3 gap-1.5">
               <div className="flex flex-col items-center pt-2">
-                <span className="sm:w-4 w-2.5 sm:h-4 h-2.5 rounded-full bg-green-400"></span>
-                <div className="sm:w-1 w-0.5 sm:h-24 h-16 bg-green-400"></div>
-                <span className="sm:w-4 w-2.5 sm:h-4 h-2.5 rounded-full bg-green-400"></span>
+                <span
+                  className={`sm:w-3.5 w-2 sm:h-3.5 h-2 rounded-full border-2 border-green-400 transition-all duration-200 ease-in ${
+                    document.getElementById("pickupLocation") &&
+                    document.getElementById("pickupLocation").value
+                      ? "bg-green-400"
+                      : ""
+                  }`}
+                ></span>
+                <div className="sm:w-1 w-0.5 sm:h-24 h-16">
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{
+                      height:
+                        document.getElementById("pickupLocation") &&
+                        document.getElementById("pickupLocation").value
+                          ? "100%"
+                          : 0,
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="h-full w-full bg-green-400"
+                  ></motion.div>
+                </div>
+                <span
+                  className={`sm:w-3.5 w-2 sm:h-3.5 h-2 rounded-full border-2 border-green-400 transition-all duration-200 ease-in delay-500 ${
+                    document.getElementById("pickupLocation") &&
+                    document.getElementById("pickupLocation").value
+                      ? "bg-green-400"
+                      : ""
+                  }`}
+                ></span>
               </div>
               <div className="grow">
                 <div className="flex flex-col mb-1">
@@ -37,6 +141,9 @@ export default function Form(props) {
                     inputId="pickupLocation"
                     setPickup={props.setPickupLocation}
                     label="Pickup Address:"
+                    error={pickupError}
+                    setError={setPickupError}
+                    setSelectedCar={props.setCarType}
                   />
                 </div>
 
@@ -44,18 +151,73 @@ export default function Form(props) {
                   <AutocompleteInput
                     placeholder="Select Dropoff location"
                     inputId="dropOffLocation"
-                    setDropoff={props.setPickupLocation}
+                    setDropoff={props.setDropoffLocation}
                     label="Dropoff Address:"
+                    error={destError}
+                    setError={setDestError}
+                    setSelectedCar={props.setCarType}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-row justify-between gap-4">
-              <DateTimeInput text={"Date:"} type={"date"} id={"dateInput"} />
-              <DateTimeInput text={"Time:"} type={"time"} id={"timeInput"} />
+            <div className="flex flex-row justify-between sm:gap-4 gap-2">
+              <DateTimeInput
+                text={"Date:"}
+                type={"date"}
+                id={"dateInput"}
+                setValue={props.setRideDate}
+                setError={setDateError}
+                error={dateError}
+              />
+              <DateTimeInput
+                text={"Time:"}
+                type={"time"}
+                id={"timeInput"}
+                setValue={props.setRideTime}
+                setError={setTimeError}
+                error={timeError}
+                dateCheck={props.rideDate}
+              />
             </div>
+            <span
+              className={`text-sm text-red-400 px-2 transition-all duration-200 ease-in w-full inline-block ${
+                dateError === "invalid" && timeError === "invalid"
+                  ? "visible text-start"
+                  : dateError === "invalid" && timeError !== "invalid"
+                  ? "visible text-start"
+                  : dateError !== "invalid" && timeError === "invalid"
+                  ? "visible text-end"
+                  : "invisible"
+              }`}
+            >
+              Invalid date value
+            </span>
           </div>
+
+          <AnimatePresence>
+            {document.getElementById("pickupLocation") &&
+              document.getElementById("pickupLocation").value !== "" &&
+              document.getElementById("dropOffLocation") &&
+              document.getElementById("dropOffLocation").value !== "" && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="overflow-hidden"
+                >
+                  <CarInfo
+                    selectedCar={props.carType}
+                    setSelectedCar={props.setCarType}
+                    distance={props.distance}
+                    setTotalPrice={props.setTotalPrice}
+                    carError={carError}
+                    setCarError={setCarError}
+                  />
+                </motion.div>
+              )}
+          </AnimatePresence>
 
           <button
             type="submit"
@@ -64,6 +226,17 @@ export default function Form(props) {
             Continue
           </button>
         </form>
+
+        <AnimatePresence>
+          {showSummary && (
+            <Summary
+              rideDetails={newRideDetails}
+              setShowSummary={setShowSummary}
+              setDate={props.setRideDate}
+              setTime={props.setRideTime}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </main>
   );

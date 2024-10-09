@@ -1,0 +1,37 @@
+[
+  {
+    "Car Model": "Toyota Corolla",
+    "Type": "Sedan",
+    "Price per km": 0.5,
+    "Estimated Speed (km/h)": 100,
+    "Image URL": "https://res.cloudinary.com/dmlrqezyo/image/upload/v1728461802/pngwing.com_5_aeg11y.png"
+  },
+  {
+    "Car Model": "BMW 3 Series",
+    "Type": "Luxury Sedan",
+    "Price per km": 1.2,
+    "Estimated Speed (km/h)": 120,
+    "Image URL": "https://res.cloudinary.com/dmlrqezyo/image/upload/v1728461801/pngwing.com_1_1_l2nvez.png"
+  },
+  {
+    "Car Model": "Mercedes-Benz",
+    "Type": "Luxury Sedan",
+    "Price per km": 1.25,
+    "Estimated Speed (km/h)": 120,
+    "Image URL": "https://res.cloudinary.com/dmlrqezyo/image/upload/v1728461802/pngwing.com_2_1_srctl6.png"
+  },
+  {
+    "Car Model": "Nissan Altima",
+    "Type": "Sedan",
+    "Price per km": 0.45,
+    "Estimated Speed (km/h)": 100,
+    "Image URL": "https://res.cloudinary.com/dmlrqezyo/image/upload/v1728461801/pngwing.com_3_1_swjgzu.png"
+  },
+  {
+    "Car Model": "Audi Q5",
+    "Type": "Luxury SUV",
+    "Price per km": 1.5,
+    "Estimated Speed (km/h)": 110,
+    "Image URL": "https://res.cloudinary.com/dmlrqezyo/image/upload/v1728461801/pngwing.com_4_1_zkeeg4.png"
+  }
+]
