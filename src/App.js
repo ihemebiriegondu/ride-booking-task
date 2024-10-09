@@ -42,7 +42,7 @@ function App() {
 
   return (
     <LoadScript
-      googleMapsApiKey={"AIzaSyBBmhytBqNTRLK3Q3wzDGHePsVQGkQ2q9k"}
+      googleMapsApiKey={"process.env.REACT_APP_GOOGLE_MAPS_API_KEY"}
       libraries={libraries}
     >
       <EstimateProvider>
