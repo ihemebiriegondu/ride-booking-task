@@ -8,6 +8,7 @@ export default function DateTimeInput({
   setError,
   setValue,
   dateCheck,
+  defaultValue
 }) {
   const [todayDate, setTodayDate] = useState("");
 
@@ -63,6 +64,7 @@ export default function DateTimeInput({
         type={type}
         name={id}
         id={id}
+        defaultValue={defaultValue}
         min={id === "dateInput" ? todayDate : ""}
         className={`md:px-3 px-2 md:py-4 py-1 rounded-md outline-none bg-transparent border-2 text-base ${
           error === "none" ? "border-gray-400" : "border-red-400"

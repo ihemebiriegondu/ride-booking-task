@@ -83,6 +83,8 @@ export default function Form(props) {
     }
   };
 
+  console.log(props.carType);
+
   return (
     <main className="h-full relative overflow-y-auto">
       <div className="absolute z-10 top-0 bottom-0 w-full">
@@ -139,6 +141,7 @@ export default function Form(props) {
                   <AutocompleteInput
                     placeholder="Select Pickup location"
                     inputId="pickupLocation"
+                    pickUp={props.pickupLocation}
                     setPickup={props.setPickupLocation}
                     label="Pickup Address:"
                     error={pickupError}
@@ -151,6 +154,7 @@ export default function Form(props) {
                   <AutocompleteInput
                     placeholder="Select Dropoff location"
                     inputId="dropOffLocation"
+                    dropOff={props.dropoffLocation}
                     setDropoff={props.setDropoffLocation}
                     label="Dropoff Address:"
                     error={destError}
@@ -165,6 +169,7 @@ export default function Form(props) {
               <DateTimeInput
                 text={"Date:"}
                 type={"date"}
+                defaultValue={props.rideDate}
                 id={"dateInput"}
                 setValue={props.setRideDate}
                 setError={setDateError}
@@ -173,6 +178,7 @@ export default function Form(props) {
               <DateTimeInput
                 text={"Time:"}
                 type={"time"}
+                defaultValue={props.rideTime}
                 id={"timeInput"}
                 setValue={props.setRideTime}
                 setError={setTimeError}
@@ -196,27 +202,28 @@ export default function Form(props) {
           </div>
 
           <AnimatePresence>
-            {document.getElementById("pickupLocation") &&
+            {((document.getElementById("pickupLocation") &&
               document.getElementById("pickupLocation").value !== "" &&
               document.getElementById("dropOffLocation") &&
-              document.getElementById("dropOffLocation").value !== "" && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="overflow-hidden"
-                >
-                  <CarInfo
-                    selectedCar={props.carType}
-                    setSelectedCar={props.setCarType}
-                    distance={props.distance}
-                    setTotalPrice={props.setTotalPrice}
-                    carError={carError}
-                    setCarError={setCarError}
-                  />
-                </motion.div>
-              )}
+              document.getElementById("dropOffLocation").value !== "") ||
+              props.carType !== "") && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="overflow-hidden"
+              >
+                <CarInfo
+                  selectedCar={props.carType}
+                  setSelectedCar={props.setCarType}
+                  distance={props.distance}
+                  setTotalPrice={props.setTotalPrice}
+                  carError={carError}
+                  setCarError={setCarError}
+                />
+              </motion.div>
+            )}
           </AnimatePresence>
 
           <button
@@ -234,6 +241,7 @@ export default function Form(props) {
               setShowSummary={setShowSummary}
               setDate={props.setRideDate}
               setTime={props.setRideTime}
+              setAllRides={props.setAllRides}
             />
           )}
         </AnimatePresence>

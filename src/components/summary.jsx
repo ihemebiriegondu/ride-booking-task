@@ -5,9 +5,7 @@ import { GrMapLocation } from "react-icons/gr";
 import { IoCarSportOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-export default function Summary({ rideDetails, setShowSummary, setDate, setTime }) {
-  console.log(rideDetails);
-
+export default function Summary({ rideDetails, setShowSummary, setAllRides }) {
   return (
     <div className="absolute sm:top-5 top-3 sm:left-5 left-3 sm:right-5 right-3 sm:bottom-4 bottom-2 bg-white">
       <h1 className="capitalize font-semibold sm:text-xl text-lg mb-3">
@@ -70,8 +68,7 @@ export default function Summary({ rideDetails, setShowSummary, setDate, setTime 
             to={"/"}
             className="inline-block text-center bg-green-400 text-white rounded-md basis-1/2 sm:py-2 py-1 sm:text-xl text-lg font-semibold"
             onClick={() => {
-              setDate("");
-              setTime("");
+              setAllRides([rideDetails]);
             }}
           >
             Book

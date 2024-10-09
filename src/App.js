@@ -10,6 +10,8 @@ import { EstimateProvider } from "./context/priceEstimateContext";
 const libraries = ["places", "geometry"];
 
 function App() {
+  const [allRides, setAllRides] = useState([]);
+
   const [showIntro, setShowIntro] = useState(true);
   const [pickupLocation, setPickupLocation] = useState(null);
   const [dropoffLocation, setDropoffLocation] = useState(null);
@@ -31,6 +33,8 @@ function App() {
     };
   }, []);
 
+  console.log(allRides)
+
   return (
     <LoadScript
       googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
@@ -41,11 +45,13 @@ function App() {
           <Intro isVisible={showIntro} />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<Dashboard allRides={allRides} />} />
               <Route
                 path="/booking form"
                 element={
                   <Form
+                    allRides={allRides}
+                    setAllRides={setAllRides}
                     setDropoffLocation={setDropoffLocation}
                     setPickupLocation={setPickupLocation}
                     pickupLocation={pickupLocation}

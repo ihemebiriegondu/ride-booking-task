@@ -56,6 +56,13 @@ const AutocompleteInput = (props) => {
             placeholder={props.placeholder}
             name={props.inputId}
             id={props.inputId}
+            defaultValue={
+              props.pickUp && props.inputId === "pickupLocation"
+                ? props.pickUp.formatted_address
+                : props.dropOff && props.inputId === "dropOffLocation"
+                ? props.dropOff.formatted_address
+                : ""
+            }
             className="w-full bg-transparent outline-none border-none sm:text-base text-sm"
             onFocus={() => props.setError(false)}
           />
