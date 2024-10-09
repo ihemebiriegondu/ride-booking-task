@@ -16,7 +16,10 @@ const AutocompleteInput = (props) => {
         props.setDropoff(place);
       }
     } else {
-      console.log("Autocomplete is not loaded yet!");
+      props.setGenError("Autocomplete is not loaded yet!");
+      setTimeout(() => {
+        props.setGenError("none");
+      }, 2000);
     }
   };
 

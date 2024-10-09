@@ -6,6 +6,7 @@ import Intro from "./components/intro";
 import Dashboard from "./pages/dashboard";
 import Form from "./pages/newRideBooking";
 import { EstimateProvider } from "./context/priceEstimateContext";
+import ErrorDiv from "./components/errorDiv";
 
 const libraries = ["places", "geometry"];
 
@@ -23,6 +24,8 @@ function App() {
   const [carType, setCarType] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [error, setError] = useState("none");
+
   useEffect(() => {
     let timer = setTimeout(() => {
       setShowIntro(false);
@@ -33,7 +36,7 @@ function App() {
     };
   }, []);
 
-  console.log(allRides)
+  console.log(allRides);
 
   return (
     <LoadScript
@@ -41,11 +44,27 @@ function App() {
       libraries={libraries}
     >
       <EstimateProvider>
-        <div className="App h-full">
+        <div className="App h-full overflow-x-hidden relative">
           <Intro isVisible={showIntro} />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Dashboard allRides={allRides} />} />
+              <Route
+                path="/"
+                element={
+                  <Dashboard
+                    allRides={allRides}
+                    setAllRides={setAllRides}
+                    setDropoffLocation={setDropoffLocation}
+                    setPickupLocation={setPickupLocation}
+                    setRideDate={setRideDate}
+                    setRideTime={setRideTime}
+                    setDistance={setDistance}
+                    setCarType={setCarType}
+                    setTotalPrice={setTotalPrice}
+                    setError={setError}
+                  />
+                }
+              />
               <Route
                 path="/booking form"
                 element={
@@ -66,11 +85,13 @@ function App() {
                     setTotalPrice={setTotalPrice}
                     carType={carType}
                     totalPrice={totalPrice}
+                    setError={setError}
                   />
                 }
               />
             </Routes>
           </BrowserRouter>
+          <ErrorDiv error={error} />
         </div>
       </EstimateProvider>
     </LoadScript>

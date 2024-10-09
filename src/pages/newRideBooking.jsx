@@ -77,13 +77,10 @@ export default function Form(props) {
     const isFormValid = validateForm();
 
     if (isFormValid) {
-      console.log("success");
       setNewRideDetails(bookingArray);
       setShowSummary(true);
     }
   };
-
-  console.log(props.carType);
 
   return (
     <main className="h-full relative overflow-y-auto">
@@ -92,6 +89,7 @@ export default function Form(props) {
           dropOffLocation={props.dropoffLocation}
           pickUpLocation={props.pickupLocation}
           setDistance={props.setDistance}
+          setError={props.setError}
         />
       </div>
       <div className="absolute z-20 lg:bottom-1/2 bottom-0 lg:translate-y-1/2 lg:left-6 overflow-y-auto 2xl:w-2/5 xl:w-5/12 lg:w-1/2 w-full bg-white lg:rounded-b-xl sm:rounded-t-xl rounded-t-lg shadow-xl sm:p-5 p-3">
@@ -147,6 +145,7 @@ export default function Form(props) {
                     error={pickupError}
                     setError={setPickupError}
                     setSelectedCar={props.setCarType}
+                    setGenError={props.setError}
                   />
                 </div>
 
@@ -160,6 +159,7 @@ export default function Form(props) {
                     error={destError}
                     setError={setDestError}
                     setSelectedCar={props.setCarType}
+                    setGenError={props.setError}
                   />
                 </div>
               </div>

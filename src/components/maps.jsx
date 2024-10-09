@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { GoogleMap, MarkerF } from "@react-google-maps/api";
 
-const Map = ({ pickUpLocation, dropOffLocation, setDistance }) => {
+const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
   const [defaultCenter, setDefaultCenter] = useState({
     lat: 6.5244,
     lng: 3.3792,
@@ -30,14 +30,20 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance }) => {
           });
         },
         (error) => {
-          console.log(error.message);
+          setError(error.message);
+          setTimeout(() => {
+            setError("none");
+          }, 2000);
           setDefaultCenter({ lat: 6.5244, lng: 3.3792 });
         }
       );
     } else {
-      console.log("Geolocation is not supported by this browser.");
+      setError("Geolocation is not supported by this browser.");
+      setTimeout(() => {
+        setError("none");
+      }, 2000);
     }
-  }, []);
+  }, [setError]);
 
   // Update the defaultCenter when pickup location is added
   useEffect(() => {
@@ -113,12 +119,15 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance }) => {
             const distanceInMeters = response.routes[0].legs[0].distance.value; // Distance in meters
             setDistance(distanceInMeters); // Set distance state
           } else {
-            console.error("Directions request failed due to " + status);
+            setError("Directions request failed due to " + status);
+            setTimeout(() => {
+              setError("none");
+            }, 2000);
           }
         }
       );
     }
-  }, [pickUpLocation, dropOffLocation]);
+  }, [pickUpLocation, dropOffLocation, setDistance, setError]);
 
   //console.log(pickUpLocation.geometry.location.lat())
   //console.log(dropOffLocation.geometry.location.lng())

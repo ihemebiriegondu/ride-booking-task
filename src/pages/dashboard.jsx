@@ -7,24 +7,26 @@ import emptySvg from "../assets/undraw_file_searching_re_3evy.svg";
 import { FaAngleDown, FaRegCalendarCheck } from "react-icons/fa";
 import { TbCurrentLocation } from "react-icons/tb";
 import { GrMapLocation } from "react-icons/gr";
+import CancelModal from "../components/cancelModal";
 
-export default function Dashboard({ allRides }) {
+export default function Dashboard(props) {
   const [showRideDetail, setShowRideDetail] = useState("none");
+  const [showCancel, setShowCancel] = useState(false);
 
   return (
     <main className="h-full flex flex-col relative">
-      <div className="bg-green-300 text-black py-5 px-3 flex flex-row items-center justify-center gap-2">
+      <div className="bg-green-400 text-black py-5 px-3 flex flex-row items-center justify-center gap-2">
         <p className="md:text-2xl text-xl">Hello there</p>
         <img src={wavingIcon} alt="waving icon" className="w-4 w-4" />
       </div>
 
       <section
         className={`sm:p-5 p-2 grow flex flex-col items-center ${
-          allRides.length === 0 ? "justify-center" : "justify-start pt-6"
+          props.allRides.length === 0 ? "justify-center" : "justify-start pt-6"
         }`}
       >
-        {allRides.length === 0 ? (
-          <div>
+        {props.allRides.length === 0 ? (
+          <div className="flex flex-col items-center">
             <img
               src={emptySvg}
               alt="no ride"
@@ -39,8 +41,8 @@ export default function Dashboard({ allRides }) {
           </div>
         ) : (
           <ul className="xl:w-2/3 lg:w-3/4 w-full mx-auto bg-green-50 sm:p-5 p-2 rounded-md">
-            {allRides &&
-              allRides.map((ride, i) => (
+            {props.allRides &&
+              props.allRides.map((ride, i) => (
                 <li key={i} className="">
                   <div className="flex flex-row items-center gap-5 w-full md:text-lg text-base">
                     <FaRegCalendarCheck />
@@ -96,7 +98,7 @@ export default function Dashboard({ allRides }) {
                         </div>
                         <div className="lg:mt-3 mt-4 w-fit flex flex-row gap-4">
                           <Link
-                            to={'/booking form'}
+                            to={"/booking form"}
                             className="bg-green-400 text-white rounded-md basis-1/2 sm:py-2 py-1 px-8 sm:text-xl text-lg font-semibold"
                           >
                             Edit
@@ -104,6 +106,7 @@ export default function Dashboard({ allRides }) {
                           <button
                             type="button"
                             className="bg-green-400 text-white rounded-md basis-1/2 sm:py-2 py-1 px-8 sm:text-xl text-lg font-semibold"
+                            onClick={() => setShowCancel(true)}
                           >
                             Cancel
                           </button>
@@ -118,8 +121,16 @@ export default function Dashboard({ allRides }) {
 
         <div className="absolute bottom-20 right-4">
           <Link
-            to={allRides.length === 0 ? "/booking form" : "/"}
-            className="hover:bg-green-300 hover:shadow group transition-all duration-300 flex flex-row items-center gap-4 rounded-full cursor-pointer"
+            to={props.allRides.length === 0 ? "/booking form" : "/"}
+            className="hover:bg-green-400 hover:shadow group transition-all duration-300 flex flex-row items-center gap-4 rounded-full cursor-pointer"
+            onClick={() => {
+              if (props.allRides.length > 0) {
+                props.setError("Ride in progress. Cancel to book another.");
+                setTimeout(() => {
+                  props.setError("none");
+                }, 2000);
+              }
+            }}
           >
             <p className="md:text-xl text-lg ps-4 invisible group-hover:visible">
               Book a ride
@@ -127,13 +138,26 @@ export default function Dashboard({ allRides }) {
             <motion.p
               whileHover={{ rotate: "45deg" }}
               transition={{ duration: 0.3 }}
-              className="bg-green-300 p-4 rounded-full md:text-2xl text-xl shadow-lg"
+              className="bg-green-400 p-4 rounded-full md:text-2xl text-xl shadow-lg"
             >
               <FiPlus />
             </motion.p>
           </Link>
         </div>
       </section>
+
+      <CancelModal
+        showCancel={showCancel}
+        setShowCancel={setShowCancel}
+        setAllRides={props.setAllRides}
+        setDropoffLocation={props.setDropoffLocation}
+        setPickupLocation={props.setPickupLocation}
+        setRideDate={props.setRideDate}
+        setRideTime={props.setRideTime}
+        setDistance={props.setDistance}
+        setCarType={props.setCarType}
+        setTotalPrice={props.setTotalPrice}
+      />
     </main>
   );
 }
