@@ -49,8 +49,8 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
   useEffect(() => {
     if (pickUpLocation) {
       setDefaultCenter({
-        lat: pickUpLocation.geometry.location.lat(),
-        lng: pickUpLocation.geometry.location.lng(),
+        lat: typeof pickUpLocation.geometry.location.lat === "function" ? pickUpLocation.geometry.location.lat() : pickUpLocation.geometry.location.lat,
+        lng: typeof pickUpLocation.geometry.location.lng === "function" ? pickUpLocation.geometry.location.lng() : pickUpLocation.geometry.location.lng,
       });
     }
   }, [pickUpLocation]);
@@ -59,8 +59,8 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
   useEffect(() => {
     if (dropOffLocation) {
       setDropoffCenter({
-        lat: dropOffLocation.geometry.location.lat(),
-        lng: dropOffLocation.geometry.location.lng(),
+        lat: typeof dropOffLocation.geometry.location.lat === "function" ? dropOffLocation.geometry.location.lat() : dropOffLocation.geometry.location.lat,
+        lng: typeof dropOffLocation.geometry.location.lng === "function" ? dropOffLocation.geometry.location.lng() : dropOffLocation.geometry.location.lng,
       });
     }
   }, [dropOffLocation]);
@@ -72,13 +72,13 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
 
       // Get the lat and lng for pickup and drop-off locations
       const pickUpLatLng = new window.google.maps.LatLng(
-        pickUpLocation.geometry.location.lat(),
-        pickUpLocation.geometry.location.lng()
+        typeof pickUpLocation.geometry.location.lat === "function" ? pickUpLocation.geometry.location.lat() : pickUpLocation.geometry.location.lat,
+        typeof pickUpLocation.geometry.location.lng === "function" ? pickUpLocation.geometry.location.lng() : pickUpLocation.geometry.location.lng,
       );
 
       const dropOffLatLng = new window.google.maps.LatLng(
-        dropOffLocation.geometry.location.lat(),
-        dropOffLocation.geometry.location.lng()
+        typeof dropOffLocation.geometry.location.lat === "function" ? dropOffLocation.geometry.location.lat() : dropOffLocation.geometry.location.lat,
+        typeof dropOffLocation.geometry.location.lng === "function" ? dropOffLocation.geometry.location.lng() : dropOffLocation.geometry.location.lng,
       );
 
       // Extend bounds to include pickup and dropoff locations
@@ -99,8 +99,8 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
       //show visible path between the two locations
       const directionsService = new window.google.maps.DirectionsService();
       const directionsRenderer = new window.google.maps.DirectionsRenderer({
-        map: mapRef.current, // Attach the map to the renderer
-        //suppressMarkers: true, // Suppress default markers (optional)
+        map: mapRef.current,
+        suppressMarkers: true,
       });
 
       // Request directions
@@ -108,7 +108,7 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
         {
           origin: pickUpLatLng,
           destination: dropOffLatLng,
-          travelMode: window.google.maps.TravelMode.DRIVING, // Set the travel mode (DRIVING, WALKING, etc.)
+          travelMode: window.google.maps.TravelMode.DRIVING,
         },
         (response, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
@@ -117,7 +117,7 @@ const Map = ({ pickUpLocation, dropOffLocation, setDistance, setError }) => {
 
             // Get distance from the response
             const distanceInMeters = response.routes[0].legs[0].distance.value; // Distance in meters
-            setDistance(distanceInMeters); // Set distance state
+            setDistance(distanceInMeters);
           } else {
             setError("Directions request failed due to " + status);
             setTimeout(() => {

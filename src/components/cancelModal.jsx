@@ -31,6 +31,7 @@ export default function CancelModal(props) {
                     props.setDistance("");
                     props.setCarType("");
                     props.setTotalPrice("");
+                    localStorage.clear()
                   }}
                 >
                   Yes

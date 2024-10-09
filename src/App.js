@@ -11,18 +11,22 @@ import ErrorDiv from "./components/errorDiv";
 const libraries = ["places", "geometry"];
 
 function App() {
-  const [allRides, setAllRides] = useState([]);
+  const [allRides, setAllRides] = useState(
+    localStorage.getItem("rideDetails")
+      ? [JSON.parse(localStorage.getItem("rideDetails"))]
+      : []
+  );
 
   const [showIntro, setShowIntro] = useState(true);
-  const [pickupLocation, setPickupLocation] = useState(null);
-  const [dropoffLocation, setDropoffLocation] = useState(null);
+  const [pickupLocation, setPickupLocation] = useState(allRides[0] ? allRides[0].pick : null);
+  const [dropoffLocation, setDropoffLocation] = useState(allRides[0] ? allRides[0].dest : null);
 
-  const [rideDate, setRideDate] = useState("");
-  const [rideTime, setRideTime] = useState("");
+  const [rideDate, setRideDate] = useState(allRides[0] ? allRides[0].date : "");
+  const [rideTime, setRideTime] = useState(allRides[0] ? allRides[0].time : "");
   const [distance, setDistance] = useState(0);
 
-  const [carType, setCarType] = useState("");
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [carType, setCarType] = useState(allRides[0] ? allRides[0].carType : "");
+  const [totalPrice, setTotalPrice] = useState(allRides[0] ? allRides[0].price : 0);
 
   const [error, setError] = useState("none");
 
@@ -35,8 +39,6 @@ function App() {
       clearTimeout(timer);
     };
   }, []);
-
-  console.log(allRides);
 
   return (
     <LoadScript

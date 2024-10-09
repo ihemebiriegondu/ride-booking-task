@@ -79,6 +79,7 @@ export default function Form(props) {
     if (isFormValid) {
       setNewRideDetails(bookingArray);
       setShowSummary(true);
+      localStorage.setItem("rideDetails", JSON.stringify(bookingArray));
     }
   };
 
