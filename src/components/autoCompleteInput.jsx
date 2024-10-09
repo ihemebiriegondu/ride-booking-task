@@ -14,7 +14,6 @@ const AutocompleteInput = (props) => {
         props.setPickup(place);
       } else if (props.inputId === "dropOffLocation") {
         props.setDropoff(place);
-        console.log(place)
       }
     } else {
       props.setGenError("Autocomplete is not loaded yet!");
